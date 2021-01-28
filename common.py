@@ -4,7 +4,8 @@ import requests
 from pyquery import PyQuery as pq
 import hashlib
 import pymysql
-from sqlalchemy import create_engine
+# from sqlalchemy import create_engine
+import pymysql
 import pandas as pd
 import logging
 import random
@@ -25,7 +26,7 @@ def get_cities():
 
 def get_uuid():
     """获取uuid"""
-    url = 'https://bj.meituan.com/meishi/'
+    url = 'https://gz.meituan.com/meishi/'
     # url = "http://localhost:8050/render.html?url=https://bj.meituan.com/meishi/&wait=5"
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36"
@@ -35,13 +36,43 @@ def get_uuid():
     with open('./utils/uuid.log', 'w') as f:
         f.write(uuid)
 
+# engine = create_engine('mysql+pymysql://{}:{}@{}:{}/{}?charset=utf8'.format(USER, PASS, HOST, PORT, DB))
+connect = pymysql.connect(**sqlConf)
+
+def create_db():
+    sql = '''
+            CREATE TABLE IF NOT EXISTS `{}` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `detail` VARCHAR(128) COLLATE utf8mb4_unicode_ci,
+            `title` VARCHAR(256) COLLATE utf8mb4_unicode_ci,
+            `avgprice` bigint(20) DEFAULT NULL,
+            `avgscore` double DEFAULT NULL,
+            `comments` bigint(20) DEFAULT NULL,
+            `openInfo` VARCHAR(256) COLLATE utf8mb4_unicode_ci,
+            `phone` VARCHAR(256) COLLATE utf8mb4_unicode_ci,
+            `frontimg` VARCHAR(256) COLLATE utf8mb4_unicode_ci,
+            `address` VARCHAR(256) COLLATE utf8mb4_unicode_ci,
+            KEY `index_{}_detail` (`detail`),
+            PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+        '''.format(TABLE)
+    cur = connect.cursor()
+    cur.execute(sql)
+    connect.commit()
+
 def save(data):
     """存储数据"""
-    engine = create_engine('mysql+pymysql://{}:{}@{}:{}/{}?charset=utf8'.format(USER, PASS, HOST, PORT, DB))
-    connect = engine.connect()
     try:
+        with engine
         df = pd.DataFrame(data, index=[0])
         df.to_sql(name=TABLE, con=connect, if_exists='append', index=False)
+
+
+        '''
+            INSERT INTO `{}` (`detail`, `title`, `avgprice`, `avgscore`, `comments`, `frontimg`, `address`)
+            VALUES
+	        (%(detail)s, %(title)s, %(avgprice)s, %(avgscore)s, %(comments)s, %(frontimg)s, %(address)s);
+        '''.format(TABLE)
     except Exception as e:
         logging.error("\nError: %s, Please check the error.\n" % e.args)
         _ = e
@@ -77,5 +108,5 @@ def abuyun_proxy():
     return proxies
 
 if __name__ == '__main__':
-    get_cities()
+    # get_cities()
     get_uuid()

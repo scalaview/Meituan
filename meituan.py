@@ -10,15 +10,18 @@ import requests
 import time
 import random
 import multiprocessing
-from config import GET_PARAM, HEADERS, TIMEOUT, MAX_PAGES, BASE_URL
+from config import GET_PARAM, HEADERS, TIMEOUT, MAX_PAGES, BASE_URL, DATA
+from mobile_config import AREAS
 from visual import View
 
-def main(base_url, page):
+def main(base_url, areaId, page):
     """主函数"""
     # 添加_token参数
-    GET_PARAM["_token"] = encrypt_token()
-    GET_PARAM['page'] = str(page)
-    url = base_url + urlencode(GET_PARAM)
+    data = GET_PARAM.copy()
+    data["areaId"] = str(areaId)
+    data["_token"] = encrypt_token(data)
+    data['page'] = str(page)
+    url = base_url + urlencode(data)
     # proxies = xdaili_proxy()
     # session = requests.Session()
     # response = json.loads(session.get(url, headers=HEADERS, proxies=proxies, timeout=TIMEOUT).text)
@@ -40,15 +43,16 @@ if __name__ == '__main__':
     #     pool.apply_async(main, (BASE_URL, page))
     # pool.close()
     # pool.join()
-
-    # 获取数据
-    for page in range(1, MAX_PAGES + 1):
-        main(BASE_URL, page)
-        time.sleep(random.randint(1,3))
+    for area in AREAS:
+        area_id = area["id"]
+        # 获取数据
+        for page in range(1, MAX_PAGES + 1):
+            main(BASE_URL, area_id, page)
+            time.sleep(random.randint(1,3))
 
     # 可视化分析
-    view = View()
-    view.meishi_top10()
-    view.avgprice_comments()
-    view.avgscore_ratio()
-    view.wrodcloud()
+    # view = View()
+    # view.meishi_top10()
+    # view.avgprice_comments()
+    # view.avgscore_ratio()
+    # view.wrodcloud()

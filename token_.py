@@ -5,25 +5,25 @@ import time
 import random
 import pandas as pd
 import os
-from config import SIGN_PARAM
+from config import sign_param
 
-def sign():
+def sign(data):
     """生成sign参数"""
     # 默认编码
     # coding = sys.getdefaultencoding()
     # 二进制压缩
-    binary_data = zlib.compress(SIGN_PARAM.encode())
+    binary_data = zlib.compress(sign_param(data).encode())
     # base64编码
     base64_data = base64.b64encode(binary_data)
     # 返回utf8编码的字符串
     return base64_data.decode()
 
 
-def encrypt_token():
+def encrypt_token(data):
     """生成_token参数"""
     ts = int(time.time() * 1000)    # time.time()返回1970年至今的时间(以秒为单位)
     # 伪装机型
-    json_path = os.path.dirname(os.path.realpath(__file__)) + '\\utils\\br.json'
+    json_path = os.path.dirname(os.path.realpath(__file__)) + '/utils/br.json'
     df = pd.read_json(json_path)
     brVD, brR_one, brR_two  = df.iloc[random.randint(0, len(df)-1)]
     token_data = {
@@ -40,7 +40,7 @@ def encrypt_token():
         "aT": [],
         "tT": [],
         "aM": "",
-        "sign": sign()
+        "sign": sign(data)
     }
     # 二进制压缩
     binary_data = zlib.compress(str(token_data).encode())

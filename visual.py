@@ -25,7 +25,7 @@ class View(object):
         # 柱状图
         fig = df3.plot(kind='barh', alpha=0.3).get_figure()
         plt.tight_layout()
-        fig.savefig('{}\\{}\\{}.jpg'.format(self.dirname, '\\view', '\\top10'))
+        fig.savefig('{}/{}/{}.jpg'.format(self.dirname, '/view', '/top10'))
         # plt.show()
 
     def avgscore_ratio(self):
@@ -33,21 +33,21 @@ class View(object):
         df = pd.read_sql('select avgscore from {table}'.format(table=TABLE), self.connect)
         # 饼状图
         fig = df['avgscore'].value_counts().plot(kind='pie').get_figure()
-        fig.savefig('{}\\{}\\{}.jpg'.format(self.dirname, '\\view', '\\ratio'))
+        fig.savefig('{}/{}/{}.jpg'.format(self.dirname, '/view', '/ratio'))
         # plt.show()
 
     def avgprice_comments(self):
         """店铺价格与评论数量的关联性"""
         df = pd.read_sql('select avgprice, comments from {table}'.format(table=TABLE), self.connect)
         fig = df.plot(kind='scatter', x='avgprice', y='comments').get_figure()
-        fig.savefig('{}\\{}\\{}.jpg'.format(self.dirname, '\\view', '\\pricom'))
+        fig.savefig('{}/{}/{}.jpg'.format(self.dirname, '/view', '/pricom'))
 
     def wrodcloud(self):
         """词云"""
         # 读取title
         titles = pd.read_sql("select title from {table}".format(table=TABLE), self.connect)
-        dirname = self.dirname + '\\view'
-        text_path = dirname + '\\title.txt'
+        dirname = self.dirname + '/view'
+        text_path = dirname + '/title.txt'
         # if not os.path.exists(text_path):
         #     open(text_path)
 
@@ -60,10 +60,10 @@ class View(object):
             with open(text_path, 'r', encoding='utf-8') as f:
                 text = f.read()
             cut_text = " ".join(jieba.cut(text))
-            color_mask = cv2.imread(dirname + '\\qin.png')
+            color_mask = cv2.imread(dirname + '/qin.png')
             cloud = WordCloud(
                 # 设置字体，不指定就会出现乱码
-                font_path= dirname + "\\FZSTK.TTF",
+                font_path= dirname + "/FZSTK.TTF",
                 # 设置背景色
                 background_color='white',
                 # 词云形状
@@ -74,7 +74,7 @@ class View(object):
                 max_font_size=50
             )
             wCloud = cloud.generate(cut_text)
-            wCloud.to_file(dirname + '\\key.png')
+            wCloud.to_file(dirname + '/key.png')
             plt.imshow(wCloud, interpolation='bilinear')
             plt.axis('off')
             plt.show()
