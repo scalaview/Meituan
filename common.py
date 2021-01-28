@@ -63,16 +63,15 @@ def create_db():
 def save(data):
     """存储数据"""
     try:
-        with engine
-        df = pd.DataFrame(data, index=[0])
-        df.to_sql(name=TABLE, con=connect, if_exists='append', index=False)
-
-
-        '''
+        sql = '''
             INSERT INTO `{}` (`detail`, `title`, `avgprice`, `avgscore`, `comments`, `frontimg`, `address`)
             VALUES
-	        (%(detail)s, %(title)s, %(avgprice)s, %(avgscore)s, %(comments)s, %(frontimg)s, %(address)s);
+	        (%(detail)s, %(title)s, %(avgprice)s, %(avgscore)s, %(comments)s, %(frontimg)s, %(address)s)
+            ON DUPLICATE KEY UPDATE detail=detail;
         '''.format(TABLE)
+        cur = connect.cursor()
+        cur.execute(sql, data)
+        connect.commit()
     except Exception as e:
         logging.error("\nError: %s, Please check the error.\n" % e.args)
         _ = e
