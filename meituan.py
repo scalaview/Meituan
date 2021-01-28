@@ -12,7 +12,7 @@ import random
 import multiprocessing
 from config import GET_PARAM, HEADERS, TIMEOUT, MAX_PAGES, BASE_URL, DATA
 from mobile_config import AREAS
-from visual import View
+# from visual import View
 
 def main(base_url, areaId, page):
     """主函数"""

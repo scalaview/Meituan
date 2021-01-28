@@ -114,6 +114,15 @@ PORT = 3306
 DB = 'meituan'
 TABLE = 'meishi'
 
+sqlConf = {
+      'host': '127.0.0.1',
+      'port': 3306,
+      'user': 'root',
+      'passwd': '123456',
+      'db': 'mtdb',
+      'charset': 'utf8',
+   }
+
 # PROXY API
 API = ''
 

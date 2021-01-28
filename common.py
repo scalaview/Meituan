@@ -13,6 +13,7 @@ import json
 from config import *
 import re
 
+connect = pymysql.connect(**sqlConf)
 
 def get_cities():
     """城市名称-拼音简写对照字典"""
@@ -37,7 +38,6 @@ def get_uuid():
         f.write(uuid)
 
 # engine = create_engine('mysql+pymysql://{}:{}@{}:{}/{}?charset=utf8'.format(USER, PASS, HOST, PORT, DB))
-connect = pymysql.connect(**sqlConf)
 
 def create_db():
     sql = '''
