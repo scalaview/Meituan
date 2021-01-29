@@ -9,7 +9,7 @@ headers = {
 }
 
 request_payload = {
-    "uuid": "11742529-7188-4fe9-8158-f8b4bec6284d",
+    "uuid": "106aa05a-ff4e-43bf-85e7-8c0a093b1473",
     "version": "8.2.0",
     "platform": 3,
     "app": "",
