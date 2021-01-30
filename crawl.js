@@ -24,7 +24,7 @@ if (finishMeituan == undefined){
 finishMeituan = JSON.parse(finishMeituan)
 area = areas.pop()
 while(true){
-  if(finishMeituan.indexOf(area.id) != -1){
+  if(finishMeituan.indexOf(area.id) != -1 && area.count > 0){
     console.log("areaId: " + area.id + " 已经抓取过，获取下个id")
     area = areas.pop()
   } else {
