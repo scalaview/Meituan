@@ -11,7 +11,10 @@ function getRandomArbitrary(min, max) {
 
 importJS('https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.1.min.js')
 
-areas = Object.values(window._appState.navBarData.areaObj)[0].filter(function(e){ return e.name != '全部'; }).reverse()
+areaObj = Object.values(window._appState.navBarData.areaObj).reverse()
+// areaObj.pop()
+// areaObj.reverse()
+areas = areaObj.flat().filter(function(e){ return e.name != '全部'; }).reverse()
 crawlerMeta = window._appState.crawlerMeta
 finishMeituan = window.localStorage.getItem('finish-meituan')
 if (finishMeituan == undefined){
